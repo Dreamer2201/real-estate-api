@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="" id="house-add-img" enctype="multipart/form-data">
+        <div>
+            <input name="title" required />
+        </div>
+        <div>
+            <input type="file" name="img" required
+             multiple />
+        </div>
+        <button>Add img</button>
+        <div id="houses"></div>
+        
+    </form>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.js"></script>
+    <script>
+
+        const houseFormAddImg = document.getElementById('house-add-img')
+       
+        const housesEl = document.getElementById('houses')
+        // console.log(houseFormAddImg)
+        // houseFormAddImg.addEventListener("submit", function(e){
+        //     e.preventDefault()
+        //     const {title, img} = houseFormAddImg.elements
+        //     console.log(title.value)
+        //     console.log(img.files)
+        //     const data = new FormData()
+        //     data.append("title", title.value)
+        //     data.append("img", img.files[0])
+        //     // axios.post('/api/houses', {data})
+        // })
+
+        const baseURL = 'http://localhost:4000'
+        const housesRequest = axios.get(`${baseURL}/api/houses`)
+        housesRequest.then(({data}) => {
+       
+            const houses = data.map(item => `<div>
+                <h2>${item.title}</h2>
+                <img src="${baseURL}/${item.imgs[1]}" />
+                <div>
+                    <ul>
+                        <li><p>Total area: ${item.total_area} m2 </p></li>
+                        <li><p>Bedrooms: ${item.bedrooms_quantity} </p></li>
+                        <li><p>Holl: ${item.holl} m2 </p></li>
+                        <li><p>Living room: ${item.living_room} m2 </p></li>
+                        <li><p>Kitchen: ${item.kitchen} m2 </p></li>
+                        <li><p>Wardrobe: ${item.wardrobe} m2 </p></li>
+                        <li><p>Bathrooms: ${item.bathroom_quantity}</p></li>
+                        <li><p>Terrace: ${item.terrace} m2 </p></li>
+                        <li><p>Garage: ${item.garage} m2 </p></li>
+                    </ul>
+                </div>
+                </div>`).join();
+                housesEl.insertAdjacentHTML("beforeend", houses)
+        })
+
+    </script>
+</body>
+</html>
