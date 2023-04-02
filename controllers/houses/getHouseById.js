@@ -6,6 +6,7 @@ const getHouseById = async (req, res, next) => {
       const {id} = req.params
       console.log(req.params)
       const house = await House.findById(id)
+      console.log(house)
       if(!house) {
         throw HttpError(404, "House is not found")
       }
