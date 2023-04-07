@@ -1,5 +1,10 @@
 const {schemaHouse} = require('./shemaHouse')
+const { registerSchema, loginSchema, updateSubscriptionSchema, verifyEmailSchema } = require('./schemaUser')
 
 module.exports = {
-    schemaHouse
+    schemaHouse,
+    registerSchema,
+    loginSchema,
+    updateSubscriptionSchema,
+    verifyEmailSchema,
 }

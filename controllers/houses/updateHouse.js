@@ -1,4 +1,4 @@
-const {schemaHouse} = require('../../shemas/index')
+const {schemaHouse} = require('../../shemas/shemaHouse')
 const path = require('path')
 const fs = require('fs/promises')
 const Jimp = require("jimp")
