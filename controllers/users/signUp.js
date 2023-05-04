@@ -1,12 +1,19 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken')
 const gravatar = require('gravatar');
 const {nanoid} = require('nanoid')
 
 const {registerSchema} = require('../../shemas/index')
 const User = require('../../models/user')
 const {HttpError, sendEmail} = require('../../helpers/index')
+// const {SECRET_KEY} = process.env
 
 const saltRounds = 10;
+
+const signToken = id =>
+  jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
 
 const registerUser = async (req, res, next) => {
     try {
@@ -32,10 +39,14 @@ const registerUser = async (req, res, next) => {
             verificationToken,
         })
 
+        const token = signToken(newUser.id);
+        newUser.token = token;
+        newUser.save();
+
         const mail = {
             to: email,
             subject: "Submit your registration",
-            html: `<a href="http://localhost:4000/api/users/verify/${verificationToken}" target="_blank">Submit your register</a>`
+            html: `<a href="http://localhost:3000" target="_blank">Submit your register</a>`
         }
 
         await sendEmail(mail)
@@ -47,6 +58,7 @@ const registerUser = async (req, res, next) => {
                     subscription: newUser.subscription,
                     avatarUrl: avatar,
                     verificationToken,
+                    token,
                 }
         })
     }
